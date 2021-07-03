@@ -11,24 +11,24 @@
 class Solution {
     public boolean isPalindrome(ListNode head) {
         ListNode reverse = null;
-        ListNode origin = new ListNode(head.val);
-        ListNode p = origin;
+        ListNode forward = head;
+        ListNode twice = head;
 
-        while(head != null) {
-            ListNode next = head.next;
-            if(next != null) {
-                p.next = new ListNode(next.val);
-                p = p.next;
-            }
+        while (twice != null && twice.next != null) {
+            twice = twice.next.next;
 
-            head.next = reverse;
-            reverse = head;
-
-            head = next;
+            ListNode next = forward.next;
+            forward.next = reverse;
+            reverse = forward;
+            forward = next;
         }
 
-        for(; reverse != null; reverse = reverse.next, origin = origin.next) {
-            if(reverse.val != origin.val) {
+        if (twice != null) { // list length is odd
+            forward = forward.next;
+        }
+
+        for (; forward != null; forward = forward.next, reverse = reverse.next) {
+            if (forward.val != reverse.val) {
                 return false;
             }
         }
